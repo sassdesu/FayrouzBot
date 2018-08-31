@@ -37,12 +37,15 @@ client.on("message", async message => {
   
   // It's good practice to ignore other bots. This also makes your bot ignore itself
   // and not get into a spam loop (we call that "botception").
-  if(message.author.bot) return;
+  if(message.author.bot) {
+    return;
+  }
   
   // Also good practice to ignore any message that does not start with our prefix, 
   // which is set in the configuration file.
-  if(message.content.indexOf(config.prefix) !== 0) return;
-  
+  if(message.content.indexOf(config.prefix) !== 0) {
+    return;
+  }
   // Here we separate our "command" name, and our "arguments" for the command. 
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
   // command = say
@@ -56,7 +59,9 @@ client.on("message", async message => {
     // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
     // The second ping is an average latency between the bot and the websocket server (one-way, not round-trip)
     const m = await message.channel.send("Ping...loading!!");
-    m.edit(`Ping is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+    return m.edit(
+      `Ping is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`
+    );
   }
   
   if(command === "say") {
@@ -66,25 +71,27 @@ client.on("message", async message => {
     // Then we delete the command message (sneaky, right?). The catch just ignores the error with a cute smiley thing.
     message.delete().catch(O_o=>{}); 
     // And we get the bot to say the thing: 
-    message.channel.send(sayMessage);
+    return message.channel.send(sayMessage);
   }
   
   if(command === "kick") {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.
     // Please read on Array.some() to understand this bit: 
     // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/some?
-    if(!message.member.roles.some(r=>["Admin", "Mod"].includes(r.name)) )
+    if(!message.member.roles.some(r=>["Admin", "Mod"].includes(r.name)) ) {
       return message.reply("Sorry, you don't have permissions to use this!");
-    
+    } 
     // Let's first check if we have a member and if we can kick them!
     // message.mentions.members is a collection of people that have been mentioned, as GuildMembers.
     // We can also support getting the member by ID, which would be args[0]
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
-    if(!member)
+    if(!member) {
       return message.reply("Please mention a valid member of this server");
-    if(!member.kickable) 
+    }
+  
+    if(!member.kickable) {
       return message.reply("I cannot kick this user! Do they have a higher role? Do I have kick permissions?");
-    
+    }
     // slice(1) removes the first part, which here should be the user mention or ID
     // join(' ') takes all the various parts to make it a single string.
     let reason = args.slice(1).join(' ');
@@ -92,8 +99,11 @@ client.on("message", async message => {
     
     // Now, time for a swift kick in the nuts!
     await member.kick(reason)
-      .catch(error => message.reply(`Sorry ${message.author} I couldn't kick because of : ${error}`));
-    message.reply(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
+      .catch(
+        error => message.reply(`Sorry ${message.author} I couldn't kick because of : ${error}`)
+      );
+    
+    return message.reply(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
 
   }
   
@@ -104,17 +114,27 @@ client.on("message", async message => {
       return message.reply("Sorry, you don't have permissions to use this!");
     
     let member = message.mentions.members.first();
-    if(!member)
+    
+    if(!member) {
       return message.reply("Please mention a valid member of this server");
-    if(!member.bannable) 
+    }
+    
+    if(!member.bannable) {
       return message.reply("I cannot ban the queen!");
-
+    }
+    
     let reason = args.slice(1).join(' ');
-    if(!reason) reason = "No reason provided";
+    
+    if (!reason) {
+      reason = "No reason provided";
+    }
     
     await member.ban(reason)
-      .catch(error => message.reply(`Sorry ${message.author} I couldn't ban because of : ${error}`));
-    message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
+      .catch(
+        error => message.reply(`Sorry ${message.author} I couldn't ban because of : ${error}`)
+      );
+    
+    return message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
   }
   
   if(command === "clean") {
@@ -134,7 +154,7 @@ client.on("message", async message => {
   }
 
   if(command === "sanyu") {
-    message.reply(`Check sanyu.ml uwu`);
+    return message.reply(`Check sanyu.ml uwu`);
   }
 
 });
