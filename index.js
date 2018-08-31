@@ -125,7 +125,7 @@ client.on("guildCreate", guild => {
      // So we get our messages, and delete them. Simple enough, right?
      const fetched = await message.channel.fetchMessages({limit: deleteCount});
      message.channel.bulkDelete(fetched)
-       .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
+       .catch(error => message.reply('Couldn't delete messages because of: ${error}'));
    }
  
   if(command === "sanyu") {
@@ -133,4 +133,5 @@ client.on("guildCreate", guild => {
   }
   
 });
+
 client.login(config.token);
