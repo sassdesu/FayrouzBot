@@ -78,11 +78,9 @@ client.on("message", async message => {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.
     // Please read on Array.some() to understand this bit: 
     // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/some?
-<<<<<<< HEAD
-    if(!message.member.roles.some(r=>["Admin", "Mod"].includes(r.name)) )
-=======
+
     if(!message.member.roles.some(r=>["Admin", "Mod"].includes(r.name)) ) {
->>>>>>> b0e642ecbaa1be04990b5dd6eb3317bf690abf13
+
       return message.reply("Sorry, you don't have permissions to use this!");
     } 
     // Let's first check if we have a member and if we can kick them!
@@ -121,18 +119,16 @@ client.on("message", async message => {
     
     if(!member) {
       return message.reply("Please mention a valid member of this server");
-<<<<<<< HEAD
+
     if(!member.bannable) 
       return message.reply("I cannot ban the queen!");
 
-=======
     }
     
     if(!member.bannable) {
       return message.reply("I cannot ban the queen!");
     }
     
->>>>>>> b0e642ecbaa1be04990b5dd6eb3317bf690abf13
     let reason = args.slice(1).join(' ');
     
     if (!reason) {
