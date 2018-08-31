@@ -11,13 +11,12 @@ const config = require("./config.json");
 // config.token contains the bot's token
 // config.prefix contains the message prefix.
 
-
 client.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
   // Example of changing the bot's playing game to something useful. `client.user` is what the
   // docs refer to as the "ClientUser".
-  client.user.setActivity(`I'm rebuilding SanyuBot from scratch it cant run music at the moment be patient ♥.`); //Serving ${client.guilds.size} servers
+  client.user.setActivity(`I'm rebuilding SanyuBot from scratch it cant run music at the moment please be patient ♥.`); //Serving ${client.guilds.size} servers
 });
 
 client.on("guildCreate", guild => {
@@ -74,7 +73,7 @@ client.on("message", async message => {
     // This command must be limited to mods and admins. In this example we just hardcode the role names.
     // Please read on Array.some() to understand this bit: 
     // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/some?
-    if(!message.member.roles.some(r=>["Administrator", "Moderator"].includes(r.name)) )
+    if(!message.member.roles.some(r=>["Admin", "Mod"].includes(r.name)) )
       return message.reply("Sorry, you don't have permissions to use this!");
     
     // Let's first check if we have a member and if we can kick them!
@@ -108,7 +107,7 @@ client.on("message", async message => {
     if(!member)
       return message.reply("Please mention a valid member of this server");
     if(!member.bannable) 
-      return message.reply("I cannot ban this user! Do they have a higher role? Do I have ban permissions?");
+      return message.reply("I cannot ban the queen!");
 
     let reason = args.slice(1).join(' ');
     if(!reason) reason = "No reason provided";
@@ -137,7 +136,7 @@ client.on("message", async message => {
   if(command === "sanyu") {
     message.reply(`Check sanyu.ml uwu`);
   }
-  
+
 });
 
 client.login(config.token);
